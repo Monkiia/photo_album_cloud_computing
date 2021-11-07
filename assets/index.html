@@ -39,21 +39,26 @@
     <h2>Search Pictures:</h2>
     <form class="example" id="form-search">
         <div>
-            <button id="start-record-btn" class="button-l" title="Start Recording"><i
-                    class="fa fa-microphone"></i></button>
-            <form action="" , method="get" ,target="" ,id="search_get">
-                <input type="text" placeholder="Search..." id="input-search" name="search">
-                <button type="button" onclick="submitSearch()" name="btn-search"><i class="fa fa-search"></i></button>
-            </form>
+            <button id="start-button" class="button-l" title="Start Recording"><i class="fa fa-microphone"></i></button>
+            <input type="text" placeholder="Search..." id="transcript" name="search">
+            <button type="button" onclick="submitSearch()" name="btn-search"><i class="fa fa-search"></i></button>
+        </div>  
+        </form>
+        <div class="col">
+            <button id="stop-button" class="button-xl" title="Stop Transcription" disabled="true"><i
+                    class="fa fa-stop-circle"></i> Stop
+            </button>
+            <button id="reset-button" class="button-xl button-secondary" title="Clear Transcript"> 
+                Clear Transcript
+            </button>
         </div>
-    </form>
+        <div id="error" class="isa_error"></div>
 
-
-    <!-- OUTPUT DIV-->
-    <div class="row">
-        <div class="column" id="imgDiv">
+        <!-- OUTPUT DIV-->
+        <div class="row">
+            <div class="column" id="imgDiv">
+            </div>
         </div>
-    </div>
-</body>
-
+        <script src="dist/main.js"></script>
+    </body>
 </html>
