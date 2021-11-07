@@ -39,8 +39,8 @@ function submitPhoto() {
 
 function submitSearch() {
     console.log("This is submit search function");
-    var inputsearchlabels = document.getElementById("input-search").value;
-    var inputsearchinnerhtml = document.getElementById("input-search").innerHTML;
+    var inputsearchlabels = document.getElementById("transcript").value;
+    var inputsearchinnerhtml = document.getElementById("transcript").innerHTML;
     console.log(inputsearchlabels);
     var params = {
         'label': inputsearchlabels
