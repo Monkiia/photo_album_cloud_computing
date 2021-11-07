@@ -1,6 +1,8 @@
 import json
 import boto3
 import logging
+from elasticsearch import Elasticsearch, RequestsHttpConnection
+from requests_aws4auth import AWS4Auth
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -20,32 +22,47 @@ es = Elasticsearch(
     connection_class = RequestsHttpConnection
 )
 
+def getpaths(slots):
+    result = []
+    if slots:
+        firstslot = slots['photoslot']
+        secondslot = slots['Additionalslot']
+        logger.debug(firstslot)
+        logger.debug(secondslot)
+        for slot in slots.values():
+            if slot is not None:
+                search_data = es.search(index="photos", body={"query": {"match": {"labels": slot}}})
+                #result.append(search_data)
+                logger.debug("ES return")
+                logger.debug(search_data)
+                if 'hits' in search_data:
+                    for files in search_data['hits']['hits']:
+                        filename = files['_source']['objectKey']
+                        logger.debug(filename)
+                        result.append(filename)
+    return result
+
 
 def lambda_handler(event, context):
     # TODO implement
+    #logger.debug("SHOW SEARCH EVENT")
+    #logger.debug(event['queryStringParameters'])
+    logger.debug("print event")
+    logger.debug(event)
+    logger.debug(es.search(index="photos"))
+    label = event['queryStringParameters']['label']
     client = boto3.client('lex-runtime')
     client_response = client.post_text(
     botName='photobot',
     botAlias='photobot',
     userId='serach-photos',
-    inputText="show me banana")
+    inputText= label)
     slots = client_response['slots']
-    if slots:
-        result = []
-        firstslot = slots['photoslot']
-        secondslot = slots['Additionalslot']
-        logger.debug(firstslot)
-        logger.debug(secondslot)
-        for slot in slots:
-            if slot is not None:
-                search_data = es.search(index="photos", body={"query": {"match": {"labels": slot}}})
-                result.append(search_data)
-        logger.debug("ES return")
-        logger.debug(serach_data)
-        
-    else:
-        logger.debug("hello, lex is so stupid that it couldn't recognize the intents!!!")
+    result = getpaths(slots)
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda!')
+        'headers': {
+            'Access-Control-Allow-Origin' : '*'
+        },
+        'body': json.dumps(result)
     }
