@@ -53,7 +53,7 @@ apigClientFactory.newClient = function (config) {
 
     
     // extract endpoint and path from url
-    var invokeUrl = 'https://uchdsoc756.execute-api.us-east-1.amazonaws.com/start';
+    var invokeUrl = 'https://rdiomykoi8.execute-api.us-east-1.amazonaws.com/early';
     var endpoint = /(^https?:\/\/[^\/]+)/g.exec(invokeUrl)[1];
     var pathComponent = invokeUrl.substring(endpoint.length);
 
@@ -81,6 +81,78 @@ apigClientFactory.newClient = function (config) {
 
     var apiGatewayClient = apiGateway.core.apiGatewayClientFactory.newClient(simpleHttpClientConfig, sigV4ClientConfig);
     
+    
+    
+    apigClient.lambdaPostPost = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, ['item', 'bucket', 'customer_labels'], ['body']);
+        
+        var lambdaPostPostRequest = {
+            verb: 'post'.toUpperCase(),
+            path: pathComponent + uritemplate('/lambda_post').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['item', 'bucket', 'customer_labels']),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(lambdaPostPostRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.lambdaPostOptions = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var lambdaPostOptionsRequest = {
+            verb: 'options'.toUpperCase(),
+            path: pathComponent + uritemplate('/lambda_post').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(lambdaPostOptionsRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.lambdaUploadPut = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, ['item', 'bucket', 'customer_labels'], ['body']);
+        
+        var lambdaUploadPutRequest = {
+            verb: 'put'.toUpperCase(),
+            path: pathComponent + uritemplate('/lambda_upload').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, ['item', 'bucket', 'customer_labels']),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(lambdaUploadPutRequest, authType, additionalParams, config.apiKey);
+    };
+    
+    
+    apigClient.lambdaUploadOptions = function (params, body, additionalParams) {
+        if(additionalParams === undefined) { additionalParams = {}; }
+        
+        apiGateway.core.utils.assertParametersDefined(params, [], ['body']);
+        
+        var lambdaUploadOptionsRequest = {
+            verb: 'options'.toUpperCase(),
+            path: pathComponent + uritemplate('/lambda_upload').expand(apiGateway.core.utils.parseParametersToObject(params, [])),
+            headers: apiGateway.core.utils.parseParametersToObject(params, []),
+            queryParams: apiGateway.core.utils.parseParametersToObject(params, []),
+            body: body
+        };
+        
+        
+        return apiGatewayClient.makeRequest(lambdaUploadOptionsRequest, authType, additionalParams, config.apiKey);
+    };
     
     
     apigClient.searchGet = function (params, body, additionalParams) {
